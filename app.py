@@ -3,9 +3,9 @@ import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'clave_maestra_definitiva_2024'
+app.secret_key = 'clave_maestra_final_v5'
 
-# CONFIGURACIÓN RAILWAY
+# CONFIGURACIÓN RAILWAY (Verifica que tus passwords sean las correctas)
 CONFIGURACIONES_MYSQL = {
     'heladeria': {
         'host': 'switchyard.proxy.rlwy.net',
@@ -62,6 +62,8 @@ def ver_datos(tipo, tabla):
     exito = request.args.get('exito')
     return render_template('ver_datos.html', tipo=tipo, tabla=tabla, datos=datos, exito=exito)
 
+# --- RUTAS DE REPLICACIÓN (CON TABLA OBLIGATORIA) ---
+
 @app.route('/seleccionar_destino/<origen>/<tabla>')
 def seleccionar_destino(origen, tabla):
     return render_template('seleccionar_destino.html', origen=origen, tabla=tabla)
@@ -75,11 +77,9 @@ def ejecutar_replicacion():
     origen = request.form.get('origen')
     destino = request.form.get('destino')
     tabla = request.form.get('tabla')
-    return realizar_transferencia(origen, destino, tabla)
-
-def realizar_transferencia(origen, destino, tabla):
+    
     try:
-        # Origen: Leer datos y estructura
+        # 1. Obtener datos y columnas
         conn_or = obtener_conexion(origen)
         cursor_or = conn_or.cursor(dictionary=True)
         cursor_or.execute(f"SHOW COLUMNS FROM {tabla}")
@@ -89,7 +89,7 @@ def realizar_transferencia(origen, destino, tabla):
         conn_or.close()
 
         if filas:
-            # Destino: Insertar dinámicamente
+            # 2. Insertar en destino
             conn_des = obtener_conexion(destino)
             cursor_des = conn_des.cursor()
             cols_str = ", ".join(columnas)
@@ -105,7 +105,7 @@ def realizar_transferencia(origen, destino, tabla):
             conn_des.close()
         return redirect(url_for('ver_datos', tipo=origen, tabla=tabla, exito='True'))
     except Exception as e:
-        return f"Error Crítico: {e}"
+        return f"Error en la replicación: {e}"
 
 @app.route('/formulario_externo')
 def formulario_externo():
@@ -123,10 +123,38 @@ def conectar_externo():
     origen = request.form.get('origen_pendiente')
     tabla = request.form.get('tabla_pendiente')
     
+    # Si viene del flujo de replicar, procesar transferencia
     if origen and tabla and origen != "None" and origen != "":
-        return realizar_transferencia(origen, 'externo', tabla)
+        # Reutilizamos la lógica de replicación
+        return realizar_transferencia_directa(origen, 'externo', tabla)
     
     return redirect(url_for('dashboard', tipo='externo'))
+
+def realizar_transferencia_directa(origen, destino, tabla):
+    # (Esta es la misma lógica que ejecutar_replicacion para el flujo externo)
+    try:
+        conn_or = obtener_conexion(origen)
+        cursor_or = conn_or.cursor(dictionary=True)
+        cursor_or.execute(f"SHOW COLUMNS FROM {tabla}")
+        columnas = [col['Field'] for col in cursor_or.fetchall()]
+        cursor_or.execute(f"SELECT * FROM {tabla}")
+        filas = cursor_or.fetchall()
+        conn_or.close()
+        
+        conn_des = obtener_conexion(destino)
+        cursor_des = conn_des.cursor()
+        cols_str = ", ".join(columnas)
+        placeholders = ", ".join(["%s"] * len(columnas))
+        update_str = ", ".join([f"{c}=VALUES({c})" for c in columnas])
+        sql = f"INSERT INTO {tabla} ({cols_str}) VALUES ({placeholders}) ON DUPLICATE KEY UPDATE {update_str}"
+        for fila in filas:
+            valores = tuple(fila[c] for c in columnas)
+            cursor_des.execute(sql, valores)
+        conn_des.commit()
+        conn_des.close()
+        return redirect(url_for('ver_datos', tipo=origen, tabla=tabla, exito='True'))
+    except Exception as e:
+        return f"Error en transferencia manual: {e}"
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
