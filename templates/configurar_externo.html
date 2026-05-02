@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <div class="card" style="width: 400px; margin: auto;">
-            <h1 style="color: #3498db;">Conexión Manual</h1>
-            <p>Ingrese los datos del servidor externo</p>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <div class="card" style="width: 450px; margin: auto;">
+        <h1 style="color: #3498db;">Conexión Manual</h1>
+        <form action="/conectar_externo" method="POST">
+            <input type="hidden" name="origen_pendiente" value="{{ origen_pendiente }}">
             
-            <form action="/conectar_externo" method="POST">
-                <input type="text" name="host" placeholder="Host (ej: proxy.rlwy.net)" required style="width: 90%; padding: 10px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 5px;">
-                <input type="text" name="user" placeholder="Usuario" required style="width: 90%; padding: 10px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 5px;">
-                <input type="password" name="password" placeholder="Contraseña" required style="width: 90%; padding: 10px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 5px;">
-                <input type="number" name="port" placeholder="Puerto" required style="width: 90%; padding: 10px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 5px;">
-                <input type="text" name="database" placeholder="Nombre de Base de Datos" required style="width: 90%; padding: 10px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 5px;">
-                
-                <button type="submit" style="width: 100%; padding: 15px; background: #3498db; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px;">
-                    Establecer Conexión
-                </button>
-            </form>
-            <a href="/" class="btn-back" style="display: block; margin-top: 15px;">Cancelar</a>
-        </div>
+            <input type="text" name="host" placeholder="Host (ej: proxy.rlwy.net)" required>
+            <input type="text" name="user" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <input type="number" name="port" placeholder="Puerto" required>
+            <input type="text" name="database" placeholder="Nombre de Base de Datos" required>
+            
+            <button type="submit" class="card" style="width: 100%; background: #3498db; margin-top: 20px;">
+                {% if origen_pendiente %} CONECTAR Y REPLICAR {% else %} ESTABLECER CONEXIÓN {% endif %}
+            </button>
+        </form>
+        <a href="/" class="btn-back">Cancelar</a>
     </div>
-</body>
-</html>
+</div>
