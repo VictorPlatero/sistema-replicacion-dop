@@ -1,36 +1,38 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+import os
 import mysql.connector
+from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_muy_segura'
+app.secret_key = 'clave_secreta_replicacion_2024'
 
-# Configuración de conexiones (Asegúrate de que estas credenciales sean correctas)
+# CONFIGURACIÓN DE LAS BD EN RAILWAY
+CONFIGURACIONES_MYSQL = {
+    'heladeria': {
+        'host': 'switchyard.proxy.rlwy.net',
+        'user': 'root',
+        'password': 'vYKkgsovkdqgsWPJqdeWfLDKEyxeJynf',
+        'port': 37240,
+        'database': 'railway'
+    },
+    'panaderia': {
+        'host': 'hopper.proxy.rlwy.net',
+        'user': 'root',
+        'password': 'PbbhHdkLhWuMRoJAWEJPTgguIhVRYgfz',
+        'port': 22262,
+        'database': 'railway'
+    }
+}
+
 def obtener_conexion(tipo):
-    if tipo == 'heladeria':
+    if tipo == 'externo':
+        conf = session.get('config_externa')
+        if not conf: return None
         return mysql.connector.connect(
-            host="tu_host_heladeria", 
-            user="tu_usuario", 
-            password="tu_password", 
-            database="heladeria",
-            port=3306
+            host=conf['host'], user=conf['user'],
+            password=conf['password'], port=int(conf['port']),
+            database=conf['database']
         )
-    elif tipo == 'panaderia':
-        return mysql.connector.connect(
-            host="tu_host_panaderia", 
-            user="tu_usuario", 
-            password="tu_password", 
-            database="panaderia",
-            port=3306
-        )
-    elif tipo == 'externo':
-        # Usa los datos guardados en la sesión para el servidor manual
-        return mysql.connector.connect(
-            host=session.get('ext_host'),
-            user=session.get('ext_user'),
-            password=session.get('ext_pass'),
-            database=session.get('ext_db'),
-            port=session.get('ext_port')
-        )
+    return mysql.connector.connect(**CONFIGURACIONES_MYSQL[tipo])
 
 @app.route('/')
 def index():
@@ -38,12 +40,17 @@ def index():
 
 @app.route('/dashboard/<tipo>')
 def dashboard(tipo):
-    return render_template('dashboard.html', tipo=tipo)
+    host = CONFIGURACIONES_MYSQL[tipo]['host'] if tipo != 'externo' else session.get('config_externa', {}).get('host', 'Externo')
+    return render_template('dashboard.html', tipo=tipo, host=host)
 
-@app.route('/tablas/<tipo>')
+@app.route('/explorar/<tipo>')
 def explorar(tipo):
-    # Aquí deberías listar las tablas reales, por ahora dejamos 'clientes'
-    return render_template('explorar.html', tipo=tipo, tablas=['clientes'])
+    conn = obtener_conexion(tipo)
+    cursor = conn.cursor()
+    cursor.execute("SHOW TABLES")
+    tablas = [t[0] for t in cursor.fetchall()]
+    conn.close()
+    return render_template('explorar.html', tablas=tablas, tipo=tipo)
 
 @app.route('/ver_datos/<tipo>/<tabla>')
 def ver_datos(tipo, tabla):
@@ -63,7 +70,7 @@ def seleccionar_destino(origen):
 def confirmar_replica(origen, destino):
     return render_template('confirmar_replica.html', origen=origen, destino=destino, tabla='clientes')
 
-# --- LÓGICA DE REPLICACIÓN REAL ---
+# --- LÓGICA DE REPLICACIÓN FÍSICA REAL ---
 @app.route('/ejecutar_replicacion', methods=['POST'])
 def ejecutar_replicacion():
     origen = request.form.get('origen')
@@ -71,30 +78,26 @@ def ejecutar_replicacion():
     tabla = "clientes"
 
     try:
-        # 1. Extraer datos del origen
-        conn_origen = obtener_conexion(origen)
-        cursor_or = conn_origen.cursor(dictionary=True)
+        # 1. Extraer del Origen
+        conn_or = obtener_conexion(origen)
+        cursor_or = conn_or.cursor(dictionary=True)
         cursor_or.execute(f"SELECT * FROM {tabla}")
         filas = cursor_or.fetchall()
-        conn_origen.close()
+        conn_or.close()
 
         if filas:
-            # 2. Insertar en el destino
-            conn_dest = obtener_conexion(destino)
-            cursor_des = conn_dest.cursor()
-            
+            # 2. Insertar en el Destino
+            conn_des = obtener_conexion(destino)
+            cursor_des = conn_des.cursor()
             for fila in filas:
-                # Usamos INSERT IGNORE o ON DUPLICATE KEY para evitar errores de IDs repetidos
                 sql = f"INSERT INTO {tabla} (id, nombre) VALUES (%s, %s) ON DUPLICATE KEY UPDATE nombre=%s"
                 cursor_des.execute(sql, (fila['id'], fila['nombre'], fila['nombre']))
-            
-            conn_dest.commit()
-            conn_dest.close()
+            conn_des.commit()
+            conn_des.close()
 
-        # Redirigir mostrando el mensaje de éxito
         return redirect(url_for('ver_datos', tipo=origen, tabla=tabla, exito='True'))
     except Exception as e:
-        return f"Error crítico al replicar: {e}"
+        return f"Error en la replicación física: {e}"
 
 @app.route('/formulario_externo')
 def formulario_externo():
@@ -102,12 +105,13 @@ def formulario_externo():
 
 @app.route('/conectar_externo', methods=['POST'])
 def conectar_externo():
-    session['ext_host'] = request.form.get('host')
-    session['ext_user'] = request.form.get('user')
-    session['ext_pass'] = request.form.get('password')
-    session['ext_port'] = request.form.get('port')
-    session['ext_db'] = request.form.get('database')
+    session['config_externa'] = {
+        'host': request.form['host'], 'user': request.form['user'],
+        'password': request.form['password'], 'port': request.form['port'],
+        'database': request.form['database']
+    }
     return redirect(url_for('dashboard', tipo='externo'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
