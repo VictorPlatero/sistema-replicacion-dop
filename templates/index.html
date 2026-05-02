@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Sistema de Replicación</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>=== SISTEMA DE REPLICACIÓN - CONEXIÓN ===</h1>
-    <div class="container">
-        <a href="/tablas/heladeria" class="card">
-            <img src="icono_helado.png" alt="">
-            BD Heladería
-        </a>
+    <div class="main-container">
+        <h1>=== SISTEMA DE REPLICACIÓN ===</h1>
+        
+        <div class="container">
+            <a href="/tablas/heladeria" class="card">
+                <div class="icon">🍦</div>
+                <span>BD Heladería</span>
+            </a>
 
-        <a href="/tablas/panaderia" class="card">
-            <img src="icono_pan.png" alt="">
-            BD Panadería
-        </a>
+            <a href="/tablas/panaderia" class="card">
+                <div class="icon">🍞</div>
+                <span>BD Panadería</span>
+            </a>
 
-        <a href="/formulario_externo" class="card">
-            <img src="icono_servidor.png" alt="">
-            Externo
-        </a>
+            <a href="/formulario_externo" class="card">
+                <div class="icon">🖧</div>
+                <span>Externo</span>
+            </a>
+        </div>
     </div>
 </body>
 </html>
