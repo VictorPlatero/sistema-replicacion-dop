@@ -1,33 +1,23 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Explorar Base de Datos</title>
+    <title>Tablas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="main-wrapper">
-        <h1>=== TABLAS EN: {{ tipo.upper() }} ===</h1>
-        
-        <div class="data-container">
-            <ul class="table-list">
-            {% for tabla in tablas %}
-                <li class="table-item">
-                    <span class="icon-table">📊</span>
-                    <span class="table-name">{{ tabla }}</span>
-                    <form action="/replicar" method="POST" style="display:inline;">
-                        <input type="hidden" name="origen" value="{{ tipo }}">
-                        <input type="hidden" name="tabla" value="{{ tabla }}">
-                        <button type="submit" class="btn-replica">Replicar</button>
-                    </form>
-                </li>
-            {% else %}
-                <p>No se encontraron tablas en esta base de datos.</p>
-            {% endfor %}
-            </ul>
+    <div class="container">
+        <div class="data-panel">
+            <h1>Tablas en {{ tipo|capitalize }}</h1>
+            <div class="card-grid">
+                {% for tabla in tablas %}
+                <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="card" style="width: 100%; padding: 15px;">
+                    <span>📊 {{ tabla }}</span>
+                </a>
+                {% endfor %}
+            </div>
+            <br>
+            <a href="/dashboard/{{ tipo }}" class="btn-back">← Volver</a>
         </div>
-
-        <a href="/" class="btn-back">Volver al Menú Principal</a>
     </div>
 </body>
 </html>
