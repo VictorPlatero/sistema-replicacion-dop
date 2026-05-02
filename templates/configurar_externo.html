@@ -1,25 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
-<body>
-    <div class="container">
-        <div class="card" style="width: 450px; margin: auto;">
-            <h1 style="color: #3498db;">Conexión Manual</h1>
-            <form action="/conectar_externo" method="POST">
-                <input type="hidden" name="origen_pendiente" value="{{ origen_pendiente }}">
-                
-                <input type="text" name="host" placeholder="Host (ej: proxy.rlwy.net)" required>
-                <input type="text" name="user" placeholder="Usuario" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <input type="number" name="port" placeholder="Puerto" required>
-                <input type="text" name="database" placeholder="Nombre de Base de Datos" required>
-                
-                <button type="submit" class="card" style="width: 100%; background: #3498db; margin-top: 20px; border: none;">
-                    {% if origen_pendiente and origen_pendiente != 'None' %} CONECTAR Y REPLICAR {% else %} ESTABLECER CONEXIÓN {% endif %}
-                </button>
-            </form>
-            <a href="/" class="btn-back">Cancelar</a>
-        </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <div class="card" style="width: 450px; margin: auto;">
+        <h1>Conexión Manual</h1>
+        <form action="/conectar_externo" method="POST">
+            <input type="hidden" name="origen_pendiente" value="{{ origen_pendiente }}">
+            <input type="hidden" name="tabla_pendiente" value="{{ tabla_pendiente }}">
+            
+            <input type="text" name="host" placeholder="Host" required>
+            <input type="text" name="user" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <input type="number" name="port" placeholder="Puerto" required>
+            <input type="text" name="database" placeholder="Base de Datos" required>
+            
+            <button type="submit" class="card" style="width: 100%; background: #3498db; border:none; margin-top:20px;">
+                {% if origen_pendiente and origen_pendiente != 'None' %} CONECTAR Y REPLICAR {% else %} ENTRAR AL PANEL {% endif %}
+            </button>
+        </form>
     </div>
-</body>
-</html>
+</div>
