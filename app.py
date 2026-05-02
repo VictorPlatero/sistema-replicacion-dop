@@ -3,7 +3,7 @@ import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'clave_maestra_replicacion_2024'
+app.secret_key = 'clave_maestra_replicacion_v3'
 
 # CONFIGURACIÓN RAILWAY
 CONFIGURACIONES_MYSQL = {
@@ -40,7 +40,6 @@ def index():
 
 @app.route('/dashboard/<tipo>')
 def dashboard(tipo):
-    # Identificar el host para el título
     if tipo == 'externo':
         host = session.get('config_externa', {}).get('host', 'Externo')
     else:
@@ -57,7 +56,7 @@ def explorar(tipo):
         conn.close()
         return render_template('explorar.html', tablas=tablas, tipo=tipo)
     except Exception as e:
-        return f"Error al explorar tablas: {e}"
+        return f"Error al explorar: {e}"
 
 @app.route('/ver_datos/<tipo>/<tabla>')
 def ver_datos(tipo, tabla):
@@ -70,66 +69,76 @@ def ver_datos(tipo, tabla):
         exito = request.args.get('exito')
         return render_template('ver_datos.html', tipo=tipo, tabla=tabla, datos=datos, exito=exito)
     except Exception as e:
-        return f"Error al obtener datos: {e}"
+        return f"Error al ver datos: {e}"
 
-@app.route('/seleccionar_destino/<origen>')
-def seleccionar_destino(origen):
-    return render_template('seleccionar_destino.html', origen=origen)
+@app.route('/seleccionar_destino/<origen>/<tabla>')
+def seleccionar_destino(origen, tabla):
+    return render_template('seleccionar_destino.html', origen=origen, tabla=tabla)
 
-@app.route('/confirmar_replica/<origen>/<destino>')
-def confirmar_replica(origen, destino):
-    return render_template('confirmar_replica.html', origen=origen, destino=destino, tabla='clientes')
+@app.route('/confirmar_replica/<origen>/<destino>/<tabla>')
+def confirmar_replica(origen, destino, tabla):
+    return render_template('confirmar_replica.html', origen=origen, destino=destino, tabla=tabla)
 
 @app.route('/ejecutar_replicacion', methods=['POST'])
 def ejecutar_replicacion():
     origen = request.form.get('origen')
     destino = request.form.get('destino')
-    return realizar_transferencia(origen, destino)
+    tabla = request.form.get('tabla')
+    return realizar_transferencia(origen, destino, tabla)
 
-def realizar_transferencia(origen, destino):
-    tabla = "clientes"
+def realizar_transferencia(origen, destino, tabla):
     try:
-        # Origen
+        # 1. Obtener datos y estructura del origen
         conn_or = obtener_conexion(origen)
         cursor_or = conn_or.cursor(dictionary=True)
+        
+        cursor_or.execute(f"SHOW COLUMNS FROM {tabla}")
+        columnas = [col['Field'] for col in cursor_or.fetchall()]
+        
         cursor_or.execute(f"SELECT * FROM {tabla}")
         filas = cursor_or.fetchall()
         conn_or.close()
 
         if filas:
-            # Destino
+            # 2. Insertar en destino con lógica dinámica
             conn_des = obtener_conexion(destino)
             cursor_des = conn_des.cursor()
+            
+            cols_str = ", ".join(columnas)
+            placeholders = ", ".join(["%s"] * len(columnas))
+            update_str = ", ".join([f"{c}=VALUES({c})" for c in columnas])
+            sql = f"INSERT INTO {tabla} ({cols_str}) VALUES ({placeholders}) ON DUPLICATE KEY UPDATE {update_str}"
+
             for fila in filas:
-                sql = f"INSERT INTO {tabla} (id, nombre) VALUES (%s, %s) ON DUPLICATE KEY UPDATE nombre=%s"
-                cursor_des.execute(sql, (fila['id'], fila['nombre'], fila['nombre']))
+                valores = tuple(fila[c] for c in columnas)
+                cursor_des.execute(sql, valores)
+            
             conn_des.commit()
             conn_des.close()
+        
         return redirect(url_for('ver_datos', tipo=origen, tabla=tabla, exito='True'))
     except Exception as e:
-        return f"Error crítico en transferencia física: {e}"
+        return f"Error crítico en replicación: {e}"
 
 @app.route('/formulario_externo')
 def formulario_externo():
-    # 'origen' puede ser None si viene de la página principal
     origen = request.args.get('origen')
-    return render_template('configurar_externo.html', origen_pendiente=origen)
+    tabla = request.args.get('tabla')
+    return render_template('configurar_externo.html', origen_pendiente=origen, tabla_pendiente=tabla)
 
 @app.route('/conectar_externo', methods=['POST'])
 def conectar_externo():
     session['config_externa'] = {
-        'host': request.form['host'],
-        'user': request.form['user'],
-        'password': request.form['password'],
-        'port': request.form['port'],
+        'host': request.form['host'], 'user': request.form['user'],
+        'password': request.form['password'], 'port': request.form['port'],
         'database': request.form['database']
     }
     origen = request.form.get('origen_pendiente')
-    # Si hay origen (no es vacío ni None), replicamos de inmediato
-    if origen and origen != "None" and origen != "":
-        return realizar_transferencia(origen, 'externo')
+    tabla = request.form.get('tabla_pendiente')
     
-    # Si no hay origen, solo entramos al dashboard del externo
+    if origen and tabla and origen != "None":
+        return realizar_transferencia(origen, 'externo', tabla)
+    
     return redirect(url_for('dashboard', tipo='externo'))
 
 if __name__ == '__main__':
