@@ -6,23 +6,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="main-container">
-        <h1>=== SISTEMA DE REPLICACIÓN ===</h1>
+    <div class="main-wrapper">
+        <h1>=== SISTEMA DE REPLICACIÓN - CONEXIÓN ===</h1>
         
-        <div class="container">
-            <a href="/tablas/heladeria" class="card">
+        <div class="cards-container">
+            <a href="/tablas/heladeria" class="db-card">
                 <div class="icon">🍦</div>
-                <span>BD Heladería</span>
+                <span class="label">BD Heladería</span>
             </a>
 
-            <a href="/tablas/panaderia" class="card">
+            <a href="/tablas/panaderia" class="db-card">
                 <div class="icon">🍞</div>
-                <span>BD Panadería</span>
+                <span class="label">BD Panadería</span>
             </a>
 
-            <a href="/formulario_externo" class="card">
+            <a href="/formulario_externo" class="db-card">
                 <div class="icon">🖧</div>
-                <span>Externo</span>
+                <span class="label">Externo</span>
             </a>
         </div>
     </div>
