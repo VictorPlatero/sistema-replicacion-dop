@@ -1,10 +1,6 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<div class="container">
-    <h1>¿Qué tabla deseas replicar?</h1>
-    <form action="/ejecutar_replicacion" method="POST">
-        <input type="hidden" name="origen" value="{{ origen }}">
-        <button type="submit" class="card" style="width:100%; cursor:pointer">
-            REPLICAR: {{ tabla }}
-        </button>
-    </form>
-</div>
+<form action="/ejecutar_replicacion" method="POST">
+    <input type="hidden" name="origen" value="{{ origen }}">
+    <input type="hidden" name="destino" value="{{ destino }}"> <button type="submit" class="card" style="width: 100%; font-size: 20px;">
+        REPLICAR: {{ tabla }}
+    </button>
+</form>
