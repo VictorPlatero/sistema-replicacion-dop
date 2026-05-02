@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
-<body>
-    <div class="container">
-        <h1>¿Qué tabla deseas replicar?</h1>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <div class="card" style="width: 100%; max-width: 500px; margin: auto;">
+        <h1 style="color: #3498db;">Confirmar Envío</h1>
+        <p>Se copiarán todos los datos de la tabla <b>{{ tabla }}</b></p>
+        <p>Hacia: <b>{{ destino.upper() }}</b></p>
         <form action="/ejecutar_replicacion" method="POST">
             <input type="hidden" name="origen" value="{{ origen }}">
             <input type="hidden" name="destino" value="{{ destino }}">
-            <button type="submit" class="card" style="width: 100%; font-size: 1.3rem;">
-                REPLICAR: {{ tabla }}
+            <input type="hidden" name="tabla" value="{{ tabla }}">
+            <button type="submit" class="card" style="width: 100%; background: #3498db; border:none; margin-top: 20px;">
+                INICIAR REPLICACIÓN
             </button>
         </form>
-        <a href="/seleccionar_destino/{{ origen }}" class="btn-back">← Volver</a>
     </div>
-</body>
-</html>
+</div>
