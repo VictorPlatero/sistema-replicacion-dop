@@ -34,62 +34,48 @@ def obtener_conexion(tipo):
         )
     return mysql.connector.connect(**CONFIGURACIONES_MYSQL[tipo])
 
-# --- INICIO ---
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# --- DASHBOARD (Panel de Operaciones) ---
 @app.route('/dashboard/<tipo>')
 def dashboard(tipo):
-    # Obtenemos el host para mostrarlo en el título como en tu foto
     host = CONFIGURACIONES_MYSQL[tipo]['host'] if tipo != 'externo' else session.get('config_externa', {}).get('host', 'Externo')
     return render_template('dashboard.html', tipo=tipo, host=host)
 
-# --- EXPLORAR TABLAS ---
 @app.route('/explorar/<tipo>')
-def ver_tablas(tipo):
-    try:
-        conn = obtener_conexion(tipo)
-        if not conn: return redirect(url_for('formulario_externo'))
-        cursor = conn.cursor()
-        cursor.execute("SHOW TABLES")
-        tablas = [t[0] for t in cursor.fetchall()]
-        conn.close()
-        return render_template('explorar.html', tablas=tablas, tipo=tipo)
-    except Exception as e:
-        return f"Error de conexión: {e}"
+def explorar(tipo):
+    conn = obtener_conexion(tipo)
+    cursor = conn.cursor()
+    cursor.execute("SHOW TABLES")
+    tablas = [t[0] for t in cursor.fetchall()]
+    conn.close()
+    return render_template('explorar.html', tablas=tablas, tipo=tipo)
 
-# --- VER DATOS DE UNA TABLA (Como en tu captura de Clientes) ---
 @app.route('/ver_datos/<tipo>/<tabla>')
 def ver_datos(tipo, tabla):
-    try:
-        conn = obtener_conexion(tipo)
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(f"SELECT * FROM {tabla}")
-        datos = cursor.fetchall()
-        conn.close()
-        # 'replicado' se activa solo si venimos de la acción de replicar
-        replicado = request.args.get('exito') == 'True'
-        return render_template('ver_datos.html', tipo=tipo, tabla=tabla, datos=datos, replicado=replicado)
-    except Exception as e:
-        return f"Error: {e}"
+    conn = obtener_conexion(tipo)
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(f"SELECT * FROM {tabla}")
+    datos = cursor.fetchall()
+    conn.close()
+    replicado = request.args.get('exito') == 'True'
+    return render_template('ver_datos.html', tipo=tipo, tabla=tabla, datos=datos, replicado=replicado)
 
-# --- REPLICACIÓN ---
 @app.route('/seleccionar_destino/<tipo>')
 def seleccionar_destino(tipo):
-    # Esta es la pantalla de "REPLICAR DESDE: HELADERIA"
     return render_template('seleccionar_destino.html', origen=tipo)
 
-@app.route('/replicar', methods=['POST'])
-def replicar():
-    # Aquí iría tu lógica de INSERT/SELECT entre bases
-    # Por ahora, redirigimos con el mensaje de éxito
-    tipo = request.form.get('origen')
-    tabla = "clientes" # O la que selecciones
-    return redirect(url_for('ver_datos', tipo=tipo, tabla=tabla, exito='True'))
+@app.route('/confirmar_replica/<origen>/<destino>')
+def confirmar_replica(origen, destino):
+    return render_template('confirmar_replica.html', origen=origen, destino=destino, tabla="clientes")
 
-# --- CONFIGURACIÓN EXTERNA ---
+@app.route('/ejecutar_replicacion', methods=['POST'])
+def ejecutar_replicacion():
+    origen = request.form.get('origen')
+    # Aquí iría la lógica SQL de replicación real
+    return redirect(url_for('ver_datos', tipo=origen, tabla='clientes', exito='True'))
+
 @app.route('/formulario_externo')
 def formulario_externo():
     return render_template('configurar_externo.html')
@@ -97,10 +83,8 @@ def formulario_externo():
 @app.route('/conectar_externo', methods=['POST'])
 def conectar_externo():
     session['config_externa'] = {
-        'host': request.form['host'],
-        'user': request.form['user'],
-        'password': request.form['password'],
-        'port': request.form['port'],
+        'host': request.form['host'], 'user': request.form['user'],
+        'password': request.form['password'], 'port': request.form['port'],
         'database': request.form['database']
     }
     return redirect(url_for('dashboard', tipo='externo'))
