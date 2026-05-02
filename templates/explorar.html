@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Explorar Tablas</title>
+    <meta charset="UTF-8">
+    <title>Explorar Base de Datos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Tablas encontradas en: {{ tipo }}</h1>
-    <ul>
-    {% for tabla in tablas %}
-        <li>{{ tabla }}</li>
-    {% else %}
-        <li>No hay tablas en esta base de datos.</li>
-    {% endfor %}
-    </ul>
-    <a href="/">Volver al menú principal</a>
+    <div class="main-wrapper">
+        <h1>=== TABLAS EN: {{ tipo.upper() }} ===</h1>
+        
+        <div class="data-container">
+            <ul class="table-list">
+            {% for tabla in tablas %}
+                <li class="table-item">
+                    <span class="icon-table">📊</span>
+                    <span class="table-name">{{ tabla }}</span>
+                    <form action="/replicar" method="POST" style="display:inline;">
+                        <input type="hidden" name="origen" value="{{ tipo }}">
+                        <input type="hidden" name="tabla" value="{{ tabla }}">
+                        <button type="submit" class="btn-replica">Replicar</button>
+                    </form>
+                </li>
+            {% else %}
+                <p>No se encontraron tablas en esta base de datos.</p>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <a href="/" class="btn-back">Volver al Menú Principal</a>
+    </div>
 </body>
 </html>
