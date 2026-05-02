@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Explorar | {{ nombre_db }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .item { background: #334155; margin: 10px 0; padding: 15px; border-radius: 12px; display: block; color: white; text-decoration: none; }
+        .item:hover { background: #38bdf8; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Tablas en {{ nombre_db }}</h2>
+        {% for t in tablas %}
+            <a href="/ver_tabla/{{ tipo }}/{{ t }}" class="item"><i class="fas fa-table"></i> {{ t }}</a>
+        {% endfor %}
+        <br>
+        <a href="/operaciones/{{ tipo }}" style="color: #94a3b8; text-decoration: none;">← Volver</a>
+    </div>
+</body>
+</html>

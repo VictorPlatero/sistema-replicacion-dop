@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DOP | Operaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 600px; }
+        .op-card { background: #1e293b; padding: 30px; border-radius: 20px; text-align: center; text-decoration: none; color: white; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .op-card:hover { border-color: #38bdf8; }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 20px; color: #38bdf8;">Servidor: {{ server_name }}</div>
+    <div class="grid">
+        <a href="/explorar/{{ tipo }}" class="op-card"><i class="fas fa-search"></i><h3>Explorar</h3></a>
+        <a href="/seleccionar_destino/{{ tipo }}" class="op-card"><i class="fas fa-sync"></i><h3>Replicar</h3></a>
+        <a href="/" class="op-card"><h3>Cambiar BD</h3></a>
+        <a href="/" class="op-card" style="color: #ef4444;"><h3>Salir</h3></a>
+    </div>
+</body>
+</html>

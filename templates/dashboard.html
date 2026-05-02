@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DOP | Resultado</title>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; padding: 40px; }
+        .container { background: #1e293b; padding: 30px; border-radius: 20px; max-width: 800px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; border-bottom: 1px solid #334155; text-align: left; }
+        .success { background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if modo == "replicar" and exito %}
+            <div class="success">✅ Replicación Física Completada</div>
+        {% endif %}
+        <h2>Datos en Tabla: {{ tabla }}</h2>
+        <table>
+            <thead><tr>{% for c in columnas %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+            <tbody>
+                {% for f in datos %}
+                <tr>{% for d in f %}<td>{{ d }}</td>{% endfor %}</tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/" style="color: #38bdf8;">Volver al Inicio</a>
+    </div>
+</body>
+</html>

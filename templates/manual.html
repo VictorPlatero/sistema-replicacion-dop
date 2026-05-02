@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DOP | Conexión Manual</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --primary: #818cf8; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 40px; width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: #c084fc; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #94a3b8; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .btn { width: 100%; padding: 12px; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn:hover { background: #6366f1; }
+        .back { display: block; text-align: center; margin-top: 15px; color: #94a3b8; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <h2>Configuración Manual</h2>
+        <form action="/conectar-manual" method="POST">
+            <div class="form-group"><label>Host del Servidor</label><input type="text" name="host" placeholder="ej: proxy.rlwy.net"></div>
+            <div class="form-group"><label>Usuario</label><input type="text" name="user" placeholder="root"></div>
+            <div class="form-group"><label>Contraseña</label><input type="password" name="pass"></div>
+            <div class="form-group"><label>Puerto</label><input type="text" name="port" placeholder="3306"></div>
+            <button type="submit" class="btn">Establecer Conexión</button>
+        </form>
+        <a href="/" class="back">← Cancelar y Volver</a>
+    </div>
+</body>
+</html>
