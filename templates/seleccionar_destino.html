@@ -1,13 +1,19 @@
-<div class="card-grid">
-    <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
-        <div class="icon">🗄️</div>
-        <span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
-        <small style="display:block; color: #a0aec0; margin-top: 5px;">Servidor: Railway</small>
-    </a>
-
-    <a href="/formulario_externo" class="card">
-        <div class="icon">🖥️</div>
-        <span>Servidor Externo</span>
-        <small style="display:block; color: #a0aec0; margin-top: 5px;">Conexión Manual</small>
-    </a>
-</div>
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+    <div class="container">
+        <h1>REPLICAR DESDE: {{ origen.upper() }}</h1>
+        <div class="card-grid">
+            <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
+                <div class="icon">🗄️</div>
+                <span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
+            </a>
+            <a href="/formulario_externo" class="card">
+                <div class="icon">🖥️</div><span>Servidor Externo</span>
+            </a>
+        </div>
+        <a href="/dashboard/{{ origen }}" class="btn-back">← Volver</a>
+    </div>
+</body>
+</html>
