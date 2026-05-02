@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tablas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <div class="data-panel">
-            <h1>Tablas en {{ tipo|capitalize }}</h1>
-            <div class="card-grid">
-                {% for tabla in tablas %}
-                <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="card" style="width: 100%; padding: 15px;">
-                    <span>📊 {{ tabla }}</span>
-                </a>
-                {% endfor %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h1>Tablas en {{ tipo.upper() }}</h1>
+    <div class="card-grid">
+        {% for tabla in tablas %}
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>{{ tabla }}</h3>
+            <div style="display: flex; gap: 10px; flex-direction: column; width: 100%;">
+                <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="btn-back" style="margin:0; color:#4ade80;">Ver Datos</a>
+                <a href="/seleccionar_destino/{{ tipo }}/{{ tabla }}" class="btn-back" style="margin:0;">Replicar Tabla</a>
             </div>
-            <br>
-            <a href="/dashboard/{{ tipo }}" class="btn-back">← Volver</a>
         </div>
+        {% endfor %}
     </div>
-</body>
-</html>
+    <a href="/dashboard/{{ tipo }}" class="btn-back">← Volver</a>
+</div>
