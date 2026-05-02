@@ -1,28 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
-<body>
-    <div class="container">
-        <h1>REPLICAR DESDE: {{ origen.upper() }}</h1>
-        <div class="card-grid">
-            {% if origen == 'externo' %}
-                <a href="/confirmar_replica/externo/heladeria" class="card">
-                    <div class="icon">🍦</div><span>BD Heladería</span>
-                </a>
-                <a href="/confirmar_replica/externo/panaderia" class="card">
-                    <div class="icon">🍞</div><span>BD Panadería</span>
-                </a>
-            {% else %}
-                <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
-                    <div class="icon">🗄️</div><span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
-                </a>
-            {% endif %}
-
-            <a href="/formulario_externo?origen={{ origen }}" class="card">
-                <div class="icon">🖥️</div><span>Servidor Externo</span>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h1>REPLICAR TABLA: {{ tabla.upper() }}</h1>
+    <p>Desde: {{ origen.upper() }}</p>
+    <div class="card-grid">
+        {% if origen == 'externo' %}
+            <a href="/confirmar_replica/externo/heladeria/{{ tabla }}" class="card">
+                <div class="icon">🍦</div><span>BD Heladería</span>
             </a>
-        </div>
-        <a href="/dashboard/{{ origen }}" class="btn-back">← Volver</a>
+            <a href="/confirmar_replica/externo/panaderia/{{ tabla }}" class="card">
+                <div class="icon">🍞</div><span>BD Panadería</span>
+            </a>
+        {% else %}
+            <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}/{{ tabla }}" class="card">
+                <div class="icon">🗄️</div><span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
+            </a>
+        {% endif %}
+        <a href="/formulario_externo?origen={{ origen }}&tabla={{ tabla }}" class="card">
+            <div class="icon">🖥️</div><span>Otro Servidor</span>
+        </a>
     </div>
-</body>
-</html>
+    <a href="/explorar/{{ origen }}" class="btn-back">← Cancelar</a>
+</div>
