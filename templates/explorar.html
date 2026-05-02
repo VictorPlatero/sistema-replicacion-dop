@@ -6,10 +6,12 @@
         <div class="card">
             <div class="icon">📊</div>
             <h3 style="margin: 10px 0;">{{ tabla }}</h3>
-            <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="btn-back" style="color:#4ade80;">Ver Datos</a>
-            <a href="/seleccionar_destino/{{ tipo }}/{{ tabla }}" class="btn-back">Replicar Tabla</a>
+            <div style="display: flex; flex-direction: column; width: 100%; gap: 10px;">
+                <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="btn-back" style="color:#4ade80; margin:0;">Ver Datos</a>
+                <a href="/seleccionar_destino/{{ tipo }}/{{ tabla }}" class="btn-back" style="margin:0;">Replicar Tabla</a>
+            </div>
         </div>
         {% endfor %}
     </div>
-    <a href="/dashboard/{{ tipo }}" class="btn-back">← Volver</a>
+    <a href="/dashboard/{{ tipo }}" class="btn-back">← Volver al Panel</a>
 </div>
