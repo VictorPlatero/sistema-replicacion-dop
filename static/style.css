@@ -1,0 +1,48 @@
+body {
+    background-color: #0d1117; /* Fondo oscuro tipo GitHub */
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.main-wrapper { text-align: center; }
+
+h1 { margin-bottom: 50px; letter-spacing: 2px; }
+
+.cards-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.db-card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 40px;
+    width: 200px;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.db-card:hover {
+    transform: translateY(-5px);
+    border-color: #58a6ff;
+    background-color: #1c2128;
+}
+
+.icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: #58a6ff; /* Azul brillante */
+}
+
+.label { font-weight: bold; font-size: 1.1em; }
