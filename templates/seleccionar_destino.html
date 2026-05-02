@@ -1,29 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Seleccionar Destino</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
-        .grid { display: flex; gap: 25px; }
-        .card { background: #1e293b; padding: 40px; border-radius: 20px; text-align: center; text-decoration: none; color: white; width: 250px; border: 1px solid rgba(255,255,255,0.1); }
-        i { font-size: 3rem; color: #818cf8; margin-bottom: 20px; display: block; }
-    </style>
-</head>
-<body>
-    <h1 style="text-transform: uppercase; letter-spacing: 2px;">Replicar desde: {{ tipo }}</h1>
-    <div class="grid">
-        <a href="/seleccionar_tabla_replicar/{{ tipo }}/{{ destino_pre }}" class="card">
-            <i class="fas fa-database"></i>
-            <h3>BD Panadería</h3>
-            <p style="font-size: 0.8rem; color: #94a3b8;">Servidor: Railway (Preconfigurada)</p>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <h1>REPLICAR DESDE: {{ origen.upper() }}</h1>
+    <div class="card-grid">
+        <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
+            <div class="icon">🗄️</div>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}
         </a>
-        <a href="/configurar_externo/{{ tipo }}" class="card">
-            <i class="fas fa-server"></i>
-            <h3>Servidor Externo</h3>
-            <p style="font-size: 0.8rem; color: #94a3b8;">Conexión Manual</p>
+        <a href="/confirmar_replica/{{ origen }}/externo" class="card">
+            <div class="icon">🖥️</div>Servidor Externo
         </a>
     </div>
-</body>
-</html>
+    <a href="/dashboard/{{ origen }}" class="btn-back">← Volver</a>
+</div>
