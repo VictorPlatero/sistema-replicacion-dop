@@ -1,36 +1,12 @@
-body {
-    background-color: #0b1423;
-    color: white;
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
+body { background-color: #0b1423; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
 .container { text-align: center; width: 90%; max-width: 800px; }
 .card-grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
-.card {
-    background: #1a2533;
-    border: 1px solid #2d3748;
-    border-radius: 15px;
-    padding: 30px;
-    width: 200px;
-    text-decoration: none;
-    color: white;
-    transition: 0.3s;
-}
+.card { background: #1a2533; border: 1px solid #2d3748; border-radius: 15px; padding: 30px; width: 220px; text-decoration: none; color: white; transition: 0.3s; cursor: pointer; }
 .card:hover { border-color: #3498db; transform: translateY(-5px); }
-.icon { font-size: 40px; color: #3498db; margin-bottom: 10px; }
-.btn-back { color: #a0aec0; text-decoration: none; display: block; margin-top: 20px; }
-.alert-success {
-    background: #1b4332;
-    color: #4ade80;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border: 1px solid #2d6a4f;
-}
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th { color: #a0aec0; border-bottom: 1px solid #2d3748; padding: 10px; text-align: left; }
-td { padding: 10px; border-bottom: 1px solid #21262d; }
+.icon { font-size: 45px; color: #3498db; margin-bottom: 15px; }
+.btn-back { color: #3498db; text-decoration: none; display: block; margin-top: 20px; font-weight: bold; }
+.alert-success { background: #1b4332; color: #4ade80; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #2d6a4f; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a2533; }
+th { color: #a0aec0; border-bottom: 1px solid #2d3748; padding: 12px; text-align: left; }
+td { padding: 12px; border-bottom: 1px solid #21262d; }
+input { width: 90%; padding: 12px; margin: 8px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 6px; }
