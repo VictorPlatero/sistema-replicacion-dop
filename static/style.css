@@ -1,12 +1,12 @@
-body { background-color: #0b1423; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-.container { text-align: center; width: 90%; max-width: 900px; }
-.card-grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
-.card { background: #1a2533; border: 2px solid #2d3748; border-radius: 15px; padding: 30px; width: 230px; text-decoration: none; color: white; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-.card:hover { border-color: #3498db; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-.icon { font-size: 50px; color: #3498db; margin-bottom: 15px; }
-.btn-back { color: #3498db; text-decoration: none; display: block; margin-top: 25px; font-weight: bold; }
-.alert-success { background: rgba(39, 174, 96, 0.2); color: #4ade80; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #27ae60; display: inline-block; }
+body { background-color: #0b1423; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+.container { text-align: center; width: 95%; max-width: 1000px; padding: 20px; }
+.card-grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.card { background: #1a2533; border: 2px solid #2d3748; border-radius: 15px; padding: 25px; width: 240px; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+.card:hover { border-color: #3498db; transform: translateY(-5px); }
+.icon { font-size: 40px; color: #3498db; margin-bottom: 15px; }
+.btn-back { color: #3498db; text-decoration: none; display: block; margin-top: 20px; font-weight: bold; cursor: pointer; }
+.alert-success { background: #1b4332; color: #4ade80; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #2d6a4f; display: inline-block; }
 table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a2533; border-radius: 10px; overflow: hidden; }
-th { color: #a0aec0; border-bottom: 1px solid #2d3748; padding: 12px; text-align: left; background: #242f3d; }
+th { background: #2d3748; padding: 12px; text-align: left; color: #a0aec0; }
 td { padding: 12px; border-bottom: 1px solid #21262d; }
-input { width: 100%; padding: 12px; margin: 10px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 6px; box-sizing: border-box; }
+input { width: 100%; padding: 12px; margin: 8px 0; background: #0b1423; color: white; border: 1px solid #2d3748; border-radius: 6px; box-sizing: border-box; }
