@@ -5,11 +5,9 @@
         {% for tabla in tablas %}
         <div class="card">
             <div class="icon">📊</div>
-            <h3>{{ tabla }}</h3>
-            <div style="display: flex; gap: 10px; flex-direction: column; width: 100%;">
-                <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="btn-back" style="margin:0; color:#4ade80;">Ver Datos</a>
-                <a href="/seleccionar_destino/{{ tipo }}/{{ tabla }}" class="btn-back" style="margin:0;">Replicar Tabla</a>
-            </div>
+            <h3 style="margin: 10px 0;">{{ tabla }}</h3>
+            <a href="/ver_datos/{{ tipo }}/{{ tabla }}" class="btn-back" style="color:#4ade80;">Ver Datos</a>
+            <a href="/seleccionar_destino/{{ tipo }}/{{ tabla }}" class="btn-back">Replicar Tabla</a>
         </div>
         {% endfor %}
     </div>
