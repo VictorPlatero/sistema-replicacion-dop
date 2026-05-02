@@ -1,13 +1,11 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<div class="container">
-    <h1>REPLICAR DESDE: {{ origen.upper() }}</h1>
-    <div class="card-grid">
-        <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
-            <div class="icon">🗄️</div>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}
-        </a>
-        <a href="/confirmar_replica/{{ origen }}/externo" class="card">
-            <div class="icon">🖥️</div>Servidor Externo
-        </a>
-    </div>
-    <a href="/dashboard/{{ origen }}" class="btn-back">← Volver</a>
+<div class="card-grid">
+    <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}" class="card">
+        <div class="icon">🗄️</div>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}
+    </a>
+
+    <a href="/formulario_externo" class="card">
+        <div class="icon">🖥️</div>
+        <span>Servidor Externo</span>
+        <small>Conexión Manual</small>
+    </a>
 </div>
