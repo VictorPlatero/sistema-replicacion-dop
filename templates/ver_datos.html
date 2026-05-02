@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datos de Tabla</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="data-panel">
+            {% if replicado %}
+            <div class="alert-success">✅ Replicación Física Completada</div>
+            {% endif %}
+            
+            <h1>Datos en Tabla: {{ tabla }}</h1>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in datos %}
+                    <tr>
+                        <td>{{ fila.id }}</td>
+                        <td>{{ fila.nombre }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="/dashboard/{{ tipo }}" class="btn-blue">Volver al Inicio</a>
+        </div>
+    </div>
+</body>
+</html>
