@@ -3,9 +3,9 @@ import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_replicacion_2024'
+app.secret_key = 'clave_secreta_replicacion_final'
 
-# CONFIGURACIÓN DE LAS BD EN RAILWAY
+# CONFIGURACIÓN RAILWAY
 CONFIGURACIONES_MYSQL = {
     'heladeria': {
         'host': 'switchyard.proxy.rlwy.net',
@@ -70,15 +70,15 @@ def seleccionar_destino(origen):
 def confirmar_replica(origen, destino):
     return render_template('confirmar_replica.html', origen=origen, destino=destino, tabla='clientes')
 
-# --- LÓGICA DE REPLICACIÓN FÍSICA REAL ---
 @app.route('/ejecutar_replicacion', methods=['POST'])
 def ejecutar_replicacion():
     origen = request.form.get('origen')
     destino = request.form.get('destino')
-    tabla = "clientes"
+    return realizar_transferencia(origen, destino)
 
+def realizar_transferencia(origen, destino):
+    tabla = "clientes"
     try:
-        # 1. Extraer del Origen
         conn_or = obtener_conexion(origen)
         cursor_or = conn_or.cursor(dictionary=True)
         cursor_or.execute(f"SELECT * FROM {tabla}")
@@ -86,7 +86,6 @@ def ejecutar_replicacion():
         conn_or.close()
 
         if filas:
-            # 2. Insertar en el Destino
             conn_des = obtener_conexion(destino)
             cursor_des = conn_des.cursor()
             for fila in filas:
@@ -94,14 +93,15 @@ def ejecutar_replicacion():
                 cursor_des.execute(sql, (fila['id'], fila['nombre'], fila['nombre']))
             conn_des.commit()
             conn_des.close()
-
         return redirect(url_for('ver_datos', tipo=origen, tabla=tabla, exito='True'))
     except Exception as e:
-        return f"Error en la replicación física: {e}"
+        return f"Error en transferencia: {e}"
 
 @app.route('/formulario_externo')
 def formulario_externo():
-    return render_template('configurar_externo.html')
+    # Detectamos si venimos de un proceso de replicación
+    origen = request.args.get('origen')
+    return render_template('configurar_externo.html', origen_pendiente=origen)
 
 @app.route('/conectar_externo', methods=['POST'])
 def conectar_externo():
@@ -110,6 +110,9 @@ def conectar_externo():
         'password': request.form['password'], 'port': request.form['port'],
         'database': request.form['database']
     }
+    origen = request.form.get('origen_pendiente')
+    if origen:
+        return realizar_transferencia(origen, 'externo')
     return redirect(url_for('dashboard', tipo='externo'))
 
 if __name__ == '__main__':
