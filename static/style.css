@@ -1,85 +1,36 @@
-:root {
-    --bg-main: #0b1423;
-    --card-bg: #1a2533;
-    --accent-blue: #3498db;
-    --text-white: #ffffff;
-    --text-gray: #a0aec0;
-    --success-green: #27ae60;
-}
-
 body {
-    background-color: var(--bg-main);
-    color: var(--text-white);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
+    background-color: #0b1423;
+    color: white;
+    font-family: sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    margin: 0;
 }
-
-.container { text-align: center; width: 90%; max-width: 900px; }
-
-h1 { font-size: 1.8rem; margin-bottom: 40px; letter-spacing: 1px; }
-
-/* Tarjetas Redondeadas */
-.card-grid {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
+.container { text-align: center; width: 90%; max-width: 800px; }
+.card-grid { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
 .card {
-    background-color: var(--card-bg);
+    background: #1a2533;
+    border: 1px solid #2d3748;
     border-radius: 15px;
     padding: 30px;
-    width: 250px;
+    width: 200px;
     text-decoration: none;
     color: white;
     transition: 0.3s;
-    border: 1px solid #2d3748;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
-
-.card:hover { transform: translateY(-5px); border-color: var(--accent-blue); }
-
-.icon { font-size: 50px; margin-bottom: 15px; color: var(--accent-blue); }
-
-/* Tablas de Datos */
-.data-panel {
-    background: var(--card-bg);
-    padding: 30px;
-    border-radius: 20px;
-    width: 100%;
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-.data-table th { color: var(--text-gray); text-align: left; padding: 12px; border-bottom: 1px solid #2d3748; }
-.data-table td { padding: 12px; border-bottom: 1px solid #2d3748; }
-
-/* Botones y Alertas */
-.btn-blue {
-    background: var(--accent-blue);
-    color: white;
-    padding: 10px 25px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-block;
-}
-
+.card:hover { border-color: #3498db; transform: translateY(-5px); }
+.icon { font-size: 40px; color: #3498db; margin-bottom: 10px; }
+.btn-back { color: #a0aec0; text-decoration: none; display: block; margin-top: 20px; }
 .alert-success {
-    background: rgba(39, 174, 96, 0.2);
-    border: 1px solid var(--success-green);
+    background: #1b4332;
     color: #4ade80;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 8px;
     margin-bottom: 20px;
+    border: 1px solid #2d6a4f;
 }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th { color: #a0aec0; border-bottom: 1px solid #2d3748; padding: 10px; text-align: left; }
+td { padding: 10px; border-bottom: 1px solid #21262d; }
