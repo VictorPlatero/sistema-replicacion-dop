@@ -1,28 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Panel de Operaciones</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h2 style="color: var(--accent-blue)">Servidor: {{ host }}</h2>
-        <div class="card-grid">
-            <a href="/explorar/{{ tipo }}" class="card">
-                <div class="icon">🔍</div>
-                <span>Explorar</span>
-            </a>
-            <a href="/seleccionar_destino/{{ tipo }}" class="card">
-                <div class="icon">🔄</div>
-                <span>Replicar</span>
-            </a>
-            <a href="/" class="card">
-                <span>Cambiar BD</span>
-            </a>
-            <a href="/" class="card" style="color: #e74c3c;">
-                <span>Salir</span>
-            </a>
-        </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    <p style="color:#3498db">Servidor: {{ host }}</p>
+    <div class="card-grid">
+        <a href="/explorar/{{ tipo }}" class="card"><div class="icon">🔍</div>Explorar</a>
+        <a href="/seleccionar_destino/{{ tipo }}" class="card"><div class="icon">🔄</div>Replicar</a>
+        <a href="/" class="card">Cambiar BD</a>
+        <a href="/" class="card" style="color:#e74c3c">Salir</a>
     </div>
-</body>
-</html>
+</div>
