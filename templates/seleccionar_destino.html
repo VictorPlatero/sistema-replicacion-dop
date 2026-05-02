@@ -4,15 +4,16 @@
     <p>Origen: {{ origen.upper() }}</p>
     <div class="card-grid">
         {% if origen == 'externo' %}
-            <a href="/confirmar_replica/externo/heladeria/{{ tabla }}" class="card">
+            <a href="/confirmar_replica?origen=externo&destino=heladeria&tabla={{ tabla }}" class="card">
                 <div class="icon">🍦</div><span>BD Heladería</span>
             </a>
-            <a href="/confirmar_replica/externo/panaderia/{{ tabla }}" class="card">
+            <a href="/confirmar_replica?origen=externo&destino=panaderia&tabla={{ tabla }}" class="card">
                 <div class="icon">🍞</div><span>BD Panadería</span>
             </a>
         {% else %}
-            <a href="/confirmar_replica/{{ origen }}/{{ 'panaderia' if origen == 'heladeria' else 'heladeria' }}/{{ tabla }}" class="card">
-                <div class="icon">🗄️</div><span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
+            {% set destino_fijo = 'panaderia' if origen == 'heladeria' else 'heladeria' %}
+            <a href="/confirmar_replica?origen={{ origen }}&destino={{ destino_fijo }}&tabla={{ tabla }}" class="card">
+                <div class="icon">🗄️</div><span>BD {{ destino_fijo.capitalize() }}</span>
             </a>
         {% endif %}
         
@@ -20,5 +21,5 @@
             <div class="icon">🖥️</div><span>Servidor Externo</span>
         </a>
     </div>
-    <a href="/explorar/{{ origen }}" class="btn-back">← Regresar</a>
+    <a href="/explorar/{{ origen }}" class="btn-back">← Regresar a Explorar</a>
 </div>
