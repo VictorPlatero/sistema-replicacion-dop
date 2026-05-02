@@ -1,16 +1,22 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <div class="container">
-    {% if exito %}<div class="alert-success">✅ Replicación de "{{ tabla }}" Completada</div>{% endif %}
-    <h2>Datos en {{ tabla }} ({{ tipo.upper() }})</h2>
-    <table>
-        {% if datos %}
-            <tr>{% for key in datos[0].keys() %}<th>{{ key }}</th>{% endfor %}</tr>
-            {% for fila in datos %}
-                <tr>{% for val in fila.values() %}<td>{{ val }}</td>{% endfor %}</tr>
-            {% endfor %}
-        {% else %}
-            <tr><td>No hay datos disponibles en esta tabla.</td></tr>
-        {% endif %}
-    </table>
+    {% if exito %}<div class="alert-success">✅ Replicación de "{{ tabla }}" Exitosa</div>{% endif %}
+    <h2>Registros en Tabla: {{ tabla }}</h2>
+    <div style="overflow-x: auto;">
+        <table>
+            {% if datos %}
+                <thead>
+                    <tr>{% for key in datos[0].keys() %}<th>{{ key }}</th>{% endfor %}</tr>
+                </thead>
+                <tbody>
+                    {% for fila in datos %}
+                        <tr>{% for val in fila.values() %}<td>{{ val }}</td>{% endfor %}</tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <tr><td colspan="100%">No hay datos en esta tabla.</td></tr>
+            {% endif %}
+        </table>
+    </div>
     <a href="/explorar/{{ tipo }}" class="btn-back">Volver a Tablas</a>
 </div>
