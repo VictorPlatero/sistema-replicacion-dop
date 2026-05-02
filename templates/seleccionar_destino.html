@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <div class="container">
-    <h1>¿A dónde replicar {{ tabla }}?</h1>
+    <h1>¿A dónde enviar "{{ tabla }}"?</h1>
+    <p>Origen: {{ origen.upper() }}</p>
     <div class="card-grid">
         {% if origen == 'externo' %}
             <a href="/confirmar_replica/externo/heladeria/{{ tabla }}" class="card">
@@ -14,9 +15,10 @@
                 <div class="icon">🗄️</div><span>BD {{ 'Panadería' if origen == 'heladeria' else 'Heladería' }}</span>
             </a>
         {% endif %}
+        
         <a href="/formulario_externo?origen={{ origen }}&tabla={{ tabla }}" class="card">
             <div class="icon">🖥️</div><span>Servidor Externo</span>
         </a>
     </div>
-    <a href="/explorar/{{ origen }}" class="btn-back">← Cancelar</a>
+    <a href="/explorar/{{ origen }}" class="btn-back">← Regresar</a>
 </div>
