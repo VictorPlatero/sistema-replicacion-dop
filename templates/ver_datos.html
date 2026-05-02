@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
-<body>
-    <div class="container">
-        {% if exito %}<div class="alert-success">✅ Replicación Física Completada</div>{% endif %}
-        <div class="card" style="width: 100%; text-align: left;">
-            <h3>Datos en Tabla: {{ tabla }}</h3>
-            <table>
-                <tr><th>id</th><th>nombre</th></tr>
-                {% for fila in datos %}
-                <tr><td>{{ fila.id }}</td><td>{{ fila.nombre }}</td></tr>
-                {% endfor %}
-            </table>
-            <a href="/dashboard/{{ tipo }}" class="btn-back">Volver al Inicio</a>
-        </div>
-    </div>
-</body>
-</html>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<div class="container">
+    {% if exito %}<div class="alert-success">✅ Replicación de "{{ tabla }}" Completada</div>{% endif %}
+    <h2>Datos en {{ tabla }} ({{ tipo.upper() }})</h2>
+    <table>
+        {% if datos %}
+            <tr>{% for key in datos[0].keys() %}<th>{{ key }}</th>{% endfor %}</tr>
+            {% for fila in datos %}
+                <tr>{% for val in fila.values() %}<td>{{ val }}</td>{% endfor %}</tr>
+            {% endfor %}
+        {% else %}
+            <tr><td>No hay datos disponibles en esta tabla.</td></tr>
+        {% endif %}
+    </table>
+    <a href="/explorar/{{ tipo }}" class="btn-back">Volver a Tablas</a>
+</div>
