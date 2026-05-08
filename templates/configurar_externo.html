@@ -12,6 +12,13 @@
             <input type="number" name="port" placeholder="Puerto" required>
             <input type="text" name="database" placeholder="Nombre de BD" required>
             
+            <hr style="margin: 20px 0; border: 1px solid #eee;">
+            <h3 style="font-size: 14px; color: #666; margin-bottom: 10px;">Configuración Túnel SSH (Opcional)</h3>
+            <input type="text" name="ssh_host" placeholder="SSH Host (ej. bastion.midominio.com)">
+            <input type="text" name="ssh_user" placeholder="SSH Usuario">
+            <input type="password" name="ssh_password" placeholder="SSH Contraseña">
+            <input type="number" name="ssh_port" placeholder="SSH Puerto (Por defecto: 22)">
+            
             <button type="submit" class="card" style="width: 100%; background: #3498db; border:none; margin-top:20px;">
                 {% if origen_pendiente and origen_pendiente != 'None' %} CONECTAR Y REPLICAR {% else %} ENTRAR AL PANEL {% endif %}
             </button>
